@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cantinho</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: telas cheias para TV, navegação por setas do controle, foco sempre bem visível */
+:root{
+  --bg:#171433; --bg2:#2a2461; --ink:#fff7e8; --muted:#b9b3dd;
+  --coral:#ff7a59; --sun:#ffc933; --teal:#2ec4b6; --field:#0f0d24; --line:#4a4390;
+  --display:'Baloo 2','Trebuchet MS',system-ui,sans-serif;
+  --body:'Nunito',system-ui,'Segoe UI',sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{font-size:clamp(15px,1.55vw,30px);height:100%}
+body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--body);font-weight:600;overflow:hidden;-webkit-tap-highlight-color:transparent}
+#app{height:100%;overflow-y:auto;overflow-x:hidden;background:radial-gradient(120% 90% at 85% -10%,var(--bg2) 0%,var(--bg) 60%)}
+button{font:inherit;color:inherit;cursor:pointer}
+h1,h2,h3{font-family:var(--display);margin:0;font-weight:800;text-wrap:balance}
+.tela{min-height:100%;padding:4vh 4vw;display:flex;flex-direction:column;gap:3vh}
+[data-f]:focus{outline:.3rem solid #fff;outline-offset:.25rem;transform:scale(1.04);z-index:2}
+[data-f]{transition:transform .12s ease}
+.btn{background:rgba(255,255,255,.14);border:0;border-radius:999px;padding:.6rem 1.4rem;font-family:var(--display);font-weight:800;font-size:1.1rem;display:inline-flex;align-items:center;gap:.5rem}
+.btn.sel{background:var(--sun);color:#2a2200}
+.btn.grande{font-size:1.5rem;padding:.8rem 2rem;background:var(--teal);color:#06302c}
+.btn.mini{font-size:.95rem;padding:.45rem 1rem;opacity:.8}
+
+/* Início */
+.topo{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.marca{font-size:clamp(2.2rem,5vw,4rem);letter-spacing:.01em}
+.tiles{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:2.5vw;align-items:stretch;min-height:45vh}
+.tile{border:0;border-radius:2rem;background:linear-gradient(150deg,var(--c1),var(--c2));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;padding:1.5rem;color:#fff;box-shadow:0 1rem 2rem rgba(0,0,0,.3)}
+.tile svg{width:min(9rem,60%);height:auto;filter:drop-shadow(0 .3rem 0 rgba(0,0,0,.18))}
+.tile span{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,3.4vw,3.2rem);text-shadow:0 .12rem 0 rgba(0,0,0,.2)}
+@media (max-width:700px){.tiles{grid-template-columns:1fr}.tile{flex-direction:row;min-height:8rem}.tile svg{width:5rem}}
+
+/* Categoria */
+.cab{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+.cab h2{font-size:clamp(1.8rem,3.5vw,3rem)}
+.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(14rem,24vw,24rem),1fr));gap:2rem 1.6rem;padding:.4rem}
+.cartao{background:none;border:0;padding:0;text-align:left;display:flex;flex-direction:column;gap:.6rem;min-width:0}
+.thumb{aspect-ratio:16/9;max-width:100%;border-radius:1.1rem;background:linear-gradient(135deg,var(--c1),var(--c2));overflow:hidden;position:relative;display:block}
+.thumb img,.thumb svg{width:100%;height:100%;object-fit:cover;display:block}
+.tocar{position:absolute;right:.7rem;bottom:.7rem;width:2.4rem;height:2.4rem;border-radius:50%;background:rgba(255,255,255,.95)}
+.tocar::after{content:"";position:absolute;inset:0;background:var(--bg);clip-path:polygon(38% 28%,38% 72%,72% 50%);}
+.nome{font-family:var(--display);font-weight:800;font-size:1.15rem;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.vazio{max-width:34rem;font-size:1.3rem;color:var(--muted);line-height:1.5}
+
+/* Player */
+.play{height:100%;min-height:0}
+.barra{display:flex;align-items:center;gap:1.2rem;min-width:0}
+.barra h2{font-size:1.5rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.palco{flex:1;min-height:0;border-radius:1rem;overflow:hidden;background:#000}
+.palco iframe{width:100%;height:100%;border:0;display:block}
+
+/* Jogos */
+.caixa{flex:1;min-height:0;display:flex;flex-direction:column;gap:2rem;align-items:center;justify-content:center}
+.grade-mem{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.4rem;width:min(100%,62vh*1.35,56rem)}
+.carta{aspect-ratio:1/1;border:0;border-radius:1.2rem;background:none;padding:0;position:relative;perspective:60rem}
+.carta .verso,.carta .frente{position:absolute;inset:0;border-radius:1.2rem;display:grid;place-items:center;backface-visibility:hidden;transition:transform .35s ease}
+.carta .verso{background:repeating-linear-gradient(45deg,#6a5cff 0 .7rem,#5a4cf0 .7rem 1.4rem);box-shadow:inset 0 0 0 .4rem rgba(255,255,255,.35)}
+.carta .frente{background:#fff7e8;transform:rotateY(180deg)}
+.carta .frente svg{width:68%;height:68%}
+.carta.up .verso{transform:rotateY(180deg)}
+.carta.up .frente{transform:rotateY(0)}
+.carta.par .frente{box-shadow:inset 0 0 0 .35rem var(--teal)}
+.fim{text-align:center;display:flex;flex-direction:column;gap:1rem;align-items:center}
+.fim h3{font-size:2.4rem;color:var(--sun)}
+.xilo{display:flex;gap:1.2vw;align-items:flex-end;height:min(62vh,34rem);width:100%;max-width:70rem}
+.barra-n{flex:1;height:var(--h);background:var(--c);border:0;border-radius:1rem;box-shadow:inset 0 -.6rem 0 rgba(0,0,0,.18),inset 0 .5rem 0 rgba(255,255,255,.25)}
+.barra-n.bate{animation:bate .35s ease}
+@keyframes bate{0%{transform:scaleY(.94) rotate(-1.5deg)}60%{transform:scaleY(1.02) rotate(1deg)}100%{transform:none}}
+
+/* Senha e descanso */
+.pin,.descanso{align-items:center;text-align:center}
+.pin>.btn:first-child{align-self:flex-start}
+.pin h2,.descanso h2{font-size:clamp(2rem,4vw,3.4rem)}
+.pin p,.descanso p{margin:0;font-size:1.25rem;color:var(--muted);max-width:30rem;line-height:1.5}
+.dots{display:flex;gap:1rem}
+.dots i{width:1.4rem;height:1.4rem;border-radius:50%;border:.2rem solid var(--muted)}
+.dots i.on{background:var(--sun);border-color:var(--sun)}
+.dots.erro{animation:treme .4s}
+@keyframes treme{20%,60%{transform:translateX(-.6rem)}40%,80%{transform:translateX(.6rem)}}
+.teclado{display:grid;grid-template-columns:repeat(3,5rem);gap:.9rem}
+.teclado .btn{justify-content:center;height:4.2rem;padding:0;font-size:1.6rem;border-radius:1.2rem}
+.descanso svg{width:8rem;height:8rem}
+
+/* Painel dos pais */
+.painel{max-width:58rem;width:100%;margin:0 auto}
+.bloco{background:rgba(255,255,255,.07);border-radius:1.2rem;padding:1.3rem;display:flex;flex-direction:column;gap:.9rem;min-width:0}
+.bloco h3{font-size:1.4rem}
+.bloco p{margin:0;color:var(--muted);line-height:1.5;font-size:1rem}
+.linha{display:flex;gap:.7rem;flex-wrap:wrap;align-items:center}
+textarea,input{width:100%;background:var(--field);color:var(--ink);border:.15rem solid var(--line);border-radius:.7rem;padding:.7rem .9rem;font:inherit;font-size:1rem}
+input[type=number],input.curto{width:9rem}
+textarea{min-height:7rem;resize:vertical}
+.item{display:flex;align-items:center;gap:.8rem;justify-content:space-between;padding:.5rem 0;border-top:1px solid var(--line)}
+.item span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item small{color:var(--muted);margin-right:.5rem}
+.msg{min-height:1.4em;color:var(--sun)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* ---------- Configuração fácil ---------- */
+const NOME_APP = 'Cantinho';
+
+const TIPOS = {
+  series: {nome:'Séries', c1:'#ff7a59', c2:'#ff4f7b'},
+  filmes: {nome:'Filmes', c1:'#ffc933', c2:'#ff9f1c'},
+  jogos:  {nome:'Jogos',  c1:'#2ec4b6', c2:'#3a86ff'}
+};
+const JOGOS = [
+  {id:'memoria',  titulo:'Jogo da memória',    c1:'#a86bff', c2:'#ff7ab8'},
+  {id:'xilofone', titulo:'Xilofone de cores',  c1:'#3ccf7a', c2:'#2ec4b6'}
+];
+
+/* ---------- Utilidades ---------- */
+const $ = (s, r=document) => r.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const hash = s => { let h = 0; for (const c of s) h = (h*31 + c.charCodeAt(0)) | 0; return Math.abs(h).toString(36); };
+const hoje = () => { const d = new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem('cantinho.'+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem('cantinho.'+k, JSON.stringify(v)); }catch(e){} }
+};
+const PALETAS = [['#ff7a59','#ff4f7b'],['#ffc933','#ff9f1c'],['#2ec4b6','#3a86ff'],['#a86bff','#ff7ab8'],['#3ccf7a','#2ec4b6']];
+
+/* ---------- Estado ---------- */
+let arquivo = [];                         // vem do catalogo.json (no repositório)
+let extras  = store.get('extras', []);    // adicionados neste aparelho pelo painel
+let cfg     = Object.assign({pin:'1234', limite:0}, store.get('cfg', {}));
+let uso     = store.get('uso', {d:hoje(), s:0}); if (uso.d !== hoje()) uso = {d:hoje(), s:0};
+let ptipo   = 'series';
+let pinBuf  = '';
+let tick    = null;
+const todos = () => arquivo.concat(extras);
+const achar = id => todos().find(i => i.id === id);
+const esgotado = () => cfg.limite > 0 && uso.s >= cfg.limite*60;
+
+/* ---------- Links ---------- */
+function lerLink(u){
+  u = (u||'').trim(); if (!u) return null;
+  let url; try{ url = new URL(/^https?:\/\//i.test(u) ? u : 'https://'+u); }catch(e){ return null; }
+  const h = url.hostname.replace(/^(www|m|music)\./,'');
+  let vid = null, list = url.searchParams.get('list');
+  if (h === 'youtu.be') vid = url.pathname.slice(1);
+  else if (h === 'youtube.com' || h === 'youtube-nocookie.com'){
+    vid = url.searchParams.get('v') || ((url.pathname.match(/^\/(?:embed|shorts|live)\/([\w-]{11})/)||[])[1]);
+  } else return {kind:'web', url:url.href};
+  if (vid && !/^[\w-]{11}$/.test(vid)) vid = null;
+  if (list && !/^[\w-]+$/.test(list)) list = null;
+  if (list) return {kind:'playlist', list, vid};
+  if (vid) return {kind:'video', vid};
+  return null;
+}
+function embed(it){
+  const base = 'autoplay=1&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&cc_load_policy=0';
+  if (it.kind === 'web') return it.url;
+  if (it.kind === 'playlist') return it.vid
+    ? `https://www.youtube-nocookie.com/embed/${it.vid}?list=${it.list}&${base}`
+    : `https://www.youtube-nocookie.com/embed/videoseries?list=${it.list}&${base}`;
+  return `https://www.youtube-nocookie.com/embed/${it.vid}?${base}`;
+}
+const capa = it => it.capa || (it.vid ? `https://i.ytimg.com/vi/${it.vid}/hqdefault.jpg` : null);
+async function buscarMeta(link){
+  try{
+    const c = new AbortController(); const t = setTimeout(() => c.abort(), 4000);
+    const r = await fetch('https://www.youtube.com/oembed?format=json&url='+encodeURIComponent(link), {signal:c.signal});
+    clearTimeout(t); if (!r.ok) return null;
+    const j = await r.json(); return {titulo:j.title, capa:j.thumbnail_url};
+  }catch(e){ return null; }
+}
+
+/* ---------- Ícones ---------- */
+const ICONES = {
+  series:'<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M22 8l10 10 10-10" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="6" y="18" width="52" height="38" rx="8" fill="#fff"/><polygon points="26,28 26,46 42,37" fill="var(--c1)"/></svg>',
+  filmes:'<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="8" y="26" width="48" height="30" rx="5" fill="#fff"/><path d="M8 14l40-6 3 12-40 6z" fill="#fff"/><path d="M18 12l6 8M30 10l6 8M42 8l6 8" stroke="var(--c1)" stroke-width="4" stroke-linecap="round"/><polygon points="28,34 28,48 40,41" fill="var(--c1)"/></svg>',
+  jogos:'<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="18" width="56" height="30" rx="15" fill="#fff"/><rect x="14" y="29" width="14" height="5" rx="2" fill="var(--c1)"/><rect x="18.5" y="24.5" width="5" height="14" rx="2" fill="var(--c1)"/><circle cx="43" cy="28" r="4" fill="var(--c1)"/><circle cx="51" cy="35" r="4" fill="var(--c1)"/></svg>',
+  lua:'<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M44 8a26 26 0 1 0 12 40A22 22 0 0 1 44 8z" fill="#ffc933"/></svg>',
+  cadeado:'<svg viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg>'
+};
+const MINI = {
+  memoria:'<svg viewBox="0 0 160 90" aria-hidden="true"><rect x="14" y="14" width="30" height="40" rx="6" fill="#fff7e8"/><circle cx="29" cy="34" r="9" fill="#ff5c5c"/><rect x="52" y="14" width="30" height="40" rx="6" fill="#fff7e8"/><polygon points="67,22 75,46 59,46" fill="#3ccf7a"/><rect x="90" y="14" width="30" height="40" rx="6" fill="#6a5cff"/><rect x="128" y="14" width="30" height="40" rx="6" fill="#6a5cff"/><rect x="33" y="60" width="30" height="40" rx="6" fill="#6a5cff"/><rect x="71" y="60" width="30" height="40" rx="6" fill="#fff7e8"/><polygon points="86,66 90,76 101,77 93,84 95,95 86,89 77,95 79,84 71,77 82,76" fill="#ffc933"/></svg>',
+  xilofone:'<svg viewBox="0 0 160 90" aria-hidden="true"><rect x="10" y="12" width="14" height="70" rx="5" fill="#ff5c5c"/><rect x="29" y="18" width="14" height="64" rx="5" fill="#ff9f1c"/><rect x="48" y="24" width="14" height="58" rx="5" fill="#ffd23f"/><rect x="67" y="30" width="14" height="52" rx="5" fill="#3ccf7a"/><rect x="86" y="36" width="14" height="46" rx="5" fill="#4d8bff"/><rect x="105" y="42" width="14" height="40" rx="5" fill="#a86bff"/><rect x="124" y="48" width="14" height="34" rx="5" fill="#ff7ab8"/></svg>'
+};
+
+/* ---------- Telas ---------- */
+const telas = {
+  home(){
+    return `<main class="tela">
+      <header class="topo"><h1 class="marca">${esc(NOME_APP)}</h1>
+      <button class="btn mini" data-f data-act="pais" data-key="pais" aria-label="Área dos pais">${ICONES.cadeado} Pais</button></header>
+      <nav class="tiles">${Object.entries(TIPOS).map(([k,t],i) =>
+        `<button class="tile" data-f ${i===0?'data-first':''} data-act="tipo" data-v="${k}" data-key="t-${k}" style="--c1:${t.c1};--c2:${t.c2}">${ICONES[k]}<span>${t.nome}</span></button>`).join('')}</nav>
+    </main>`;
+  },
+  cat(tipo){
+    const t = TIPOS[tipo];
+    const lista = todos().filter(i => i.tipo === tipo);
+    const jogos = tipo === 'jogos' ? JOGOS.map(g =>
+      `<button class="cartao" data-f data-act="jogo" data-v="${g.id}" data-key="g-${g.id}"><span class="thumb" style="--c1:${g.c1};--c2:${g.c2}">${MINI[g.id]}<span class="tocar"></span></span><span class="nome">${esc(g.titulo)}</span></button>`).join('') : '';
+    const cards = jogos + lista.map(cartao).join('');
+    return `<main class="tela">
+      <div class="cab"><button class="btn" data-f data-first data-act="voltar" data-key="v">‹ Voltar</button><h2>${t.nome}</h2></div>
+      ${cards ? `<div class="grade">${cards}</div>` : `<p class="vazio">Ainda não tem nada aqui. Peça para um adulto adicionar na área dos pais.</p>`}
+    </main>`;
+  },
+  play(id){
+    const it = achar(id); if (!it) return telas.home();
+    const sb = it.kind === 'web' ? 'allow-scripts allow-same-origin allow-forms allow-pointer-lock' : 'allow-scripts allow-same-origin allow-presentation';
+    return `<main class="tela play">
+      <div class="barra"><button class="btn" data-f data-first data-act="voltar" data-key="v">‹ Voltar</button><h2>${esc(it.titulo)}</h2></div>
+      <div class="palco" data-f tabindex="0" data-act="video"><iframe title="${esc(it.titulo)}" src="${esc(embed(it))}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" sandbox="${sb}"></iframe></div>
+    </main>`;
+  },
+  jogo(id){
+    const g = JOGOS.find(j => j.id === id) || JOGOS[0];
+    return `<main class="tela play">
+      <div class="barra"><button class="btn" data-f data-act="voltar" data-key="v">‹ Voltar</button><h2>${esc(g.titulo)}</h2></div>
+      <div class="caixa" id="caixa"></div>
+    </main>`;
+  },
+  pin(){
+    pinBuf = '';
+    const teclas = [1,2,3,4,5,6,7,8,9].map(n => `<button class="btn" data-f data-act="tecla" data-v="${n}" data-key="k${n}">${n}</button>`).join('')
+      + `<button class="btn" data-f data-act="tecla" data-v="del" data-key="kdel" aria-label="Apagar">⌫</button>`
+      + `<button class="btn" data-f data-act="tecla" data-v="0" data-key="k0">0</button><span></span>`;
+    return `<main class="tela pin">
+      <button class="btn" data-f data-act="voltar" data-key="v">‹ Voltar</button>
+      <h2>Área dos pais</h2><p>Digite a senha de 4 dígitos.</p>
+      <div class="dots" id="dots"><i></i><i></i><i></i><i></i></div>
+      <div class="teclado">${teclas}</div>
+    </main>`;
+  },
+  descanso(){
+    return `<main class="tela descanso">
+      ${ICONES.lua}<h2>Acabou o tempo de hoje</h2>
+      <p>Amanhã tem mais! Que tal desenhar, brincar ou ouvir uma história?</p>
+      <div class="linha" style="justify-content:center"><button class="btn" data-f data-first data-act="voltar" data-key="v">Início</button>
+      <button class="btn mini" data-f data-act="pais" data-key="pais">${ICONES.cadeado} Pais</button></div>
+    </main>`;
+  },
+  panel(){
+    return `<main class="tela">
+      <div class="cab"><button class="btn" data-f data-first data-act="voltar" data-key="v">‹ Voltar</button><h2>Área dos pais</h2></div>
+      <div class="painel" style="display:flex;flex-direction:column;gap:1.4rem">
+        <section class="bloco"><h3>Adicionar conteúdo</h3>
+          <p>Cole links do YouTube, um por linha. Link de playlist vira uma série inteira. Em Jogos, também aceita o endereço de um jogo HTML5.</p>
+          <div class="linha" id="ptipos">${Object.entries(TIPOS).map(([k,t]) => `<button class="btn ${k===ptipo?'sel':''}" data-f data-act="ptipo" data-v="${k}" data-key="pt-${k}">${t.nome}</button>`).join('')}</div>
+          <textarea id="links" data-f placeholder="https://www.youtube.com/watch?v=...&#10;https://www.youtube.com/playlist?list=..."></textarea>
+          <div class="linha"><button class="btn grande" data-f data-act="adicionar" data-key="add">Adicionar</button><span class="msg" id="msg" role="status"></span></div>
+        </section>
+        <section class="bloco"><h3>Adicionados neste aparelho</h3><div id="lista">${listaHtml()}</div></section>
+        <section class="bloco"><h3>Tempo de uso por dia</h3>
+          <p id="usoinfo">Hoje: ${Math.floor(uso.s/60)} min usados. Use 0 para não limitar.</p>
+          <div class="linha"><input type="number" class="curto" id="limite" data-f min="0" step="5" value="${cfg.limite}" aria-label="Minutos por dia">
+          <button class="btn" data-f data-act="salvalimite" data-key="sl">Salvar tempo</button>
+          <button class="btn" data-f data-act="zerar" data-key="zr">Zerar hoje</button></div>
+        </section>
+        <section class="bloco"><h3>Senha</h3>
+          <div class="linha"><input class="curto" id="novopin" data-f inputmode="numeric" maxlength="4" placeholder="4 dígitos" aria-label="Nova senha">
+          <button class="btn" data-f data-act="salvapin" data-key="sp">Salvar senha</button></div>
+        </section>
+        <section class="bloco"><h3>Usar em todos os aparelhos</h3>
+          <p>Gere o catalogo.json e substitua o arquivo no repositório (GitHub). Aí a lista aparece em qualquer TV.</p>
+          <div class="linha"><button class="btn" data-f data-act="exportar" data-key="ex">Gerar catalogo.json</button><button class="btn" data-f data-act="copiar" data-key="cp">Copiar</button></div>
+          <textarea id="saida" readonly style="display:none"></textarea>
+        </section>
+      </div>
+    </main>`;
+  }
+};
+function cartao(it){
+  const [a,b] = PALETAS[parseInt(hash(it.id),36) % PALETAS.length];
+  const img = capa(it);
+  return `<button class="cartao" data-f data-act="abrir" data-v="${esc(it.id)}" data-key="c-${esc(it.id)}"><span class="thumb" style="--c1:${a};--c2:${b}">${img ? `<img loading="lazy" src="${esc(img)}" alt="" onerror="this.remove()">` : ''}<span class="tocar"></span></span><span class="nome">${esc(it.titulo)}</span></button>`;
+}
+function listaHtml(){
+  if (!extras.length) return `<p>Nada adicionado ainda.${arquivo.length ? ' '+arquivo.length+' item(ns) vêm do catalogo.json.' : ''}</p>`;
+  return extras.map(i => `<div class="item"><span><small>${TIPOS[i.tipo].nome}</small>${esc(i.titulo)}</span><button class="btn mini" data-f data-act="rem" data-v="${esc(i.id)}">Remover</button></div>`).join('');
+}
+
+/* ---------- Roteador ---------- */
+const pilha = []; let atual = {nome:'home'};
+function ir(nome, arg, opc={}){
+  const foco = document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.key : null;
+  if (!opc.replace) pilha.push({nome:atual.nome, arg:atual.arg, foco});
+  atual = {nome, arg}; render();
+}
+function voltar(){
+  if (atual.nome === 'descanso'){ pilha.length = 0; atual = {nome:'home'}; render(); return; }
+  if (!pilha.length) return;
+  const p = pilha.pop(); atual = {nome:p.nome, arg:p.arg}; render(p.foco);
+}
+function render(focoKey){
+  clearInterval(tick); tick = null;
+  const app = $('#app');
+  app.innerHTML = telas[atual.nome](atual.arg);
+  app.scrollTop = 0;
+  if (atual.nome === 'jogo'){ const c = $('#caixa'); (atual.arg === 'xilofone' ? xilofone : memoria)(c); }
+  if (atual.nome === 'play' || atual.nome === 'jogo') tick = setInterval(contar, 1000);
+  let el = focoKey ? app.querySelector(`[data-key="${CSS.escape(focoKey)}"]`) : null;
+  el = el || app.querySelector('[data-first]') || app.querySelector('[data-f]');
+  if (el && document.activeElement !== el && !(atual.nome==='jogo')) el.focus({preventScroll:true});
+}
+function contar(){
+  uso.s++; if (uso.s % 15 === 0) store.set('uso', uso);
+  if (esgotado()){ store.set('uso', uso); ir('descanso', null, {replace:true}); }
+}
+
+/* ---------- Ações ---------- */
+const acoes = {
+  tipo: b => ir('cat', b.dataset.v),
+  voltar: () => voltar(),
+  abrir: b => esgotado() ? ir('descanso') : ir('play', b.dataset.v),
+  jogo: b => esgotado() ? ir('descanso') : ir('jogo', b.dataset.v),
+  video: () => { const f = $('.palco iframe'); if (f) f.focus(); },
+  pais: () => ir('pin'),
+  tecla: b => tecla(b.dataset.v),
+  ptipo: b => { ptipo = b.dataset.v; document.querySelectorAll('#ptipos .btn').forEach(x => x.classList.toggle('sel', x.dataset.v === ptipo)); },
+  adicionar: () => adicionar(),
+  rem: b => { extras = extras.filter(i => i.id !== b.dataset.v); store.set('extras', extras); $('#lista').innerHTML = listaHtml(); msg('Removido.'); },
+  salvalimite: () => { const v = Math.max(0, parseInt($('#limite').value,10) || 0); cfg.limite = v; store.set('cfg', cfg); msg(v ? `Limite de ${v} min por dia.` : 'Sem limite de tempo.'); },
+  zerar: () => { uso = {d:hoje(), s:0}; store.set('uso', uso); $('#usoinfo').textContent = 'Hoje: 0 min usados. Use 0 para não limitar.'; msg('Tempo de hoje zerado.'); },
+  salvapin: () => { const v = $('#novopin').value.trim(); if (!/^\d{4}$/.test(v)){ msg('A senha precisa ter 4 números.'); return; } cfg.pin = v; store.set('cfg', cfg); $('#novopin').value=''; msg('Senha salva.'); },
+  exportar: () => { const s = $('#saida'); s.style.display = 'block'; s.value = JSON.stringify(todos(), null, 2); s.focus(); s.select(); },
+  copiar: async () => {
+    const s = $('#saida'); if (s.style.display === 'none') acoes.exportar();
+    try{ await navigator.clipboard.writeText(s.value); msg('Copiado.'); }catch(e){ s.focus(); s.select(); msg('Selecione e copie o texto.'); }
+  }
+};
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b || !acoes[b.dataset.act]) return;
+  acoes[b.dataset.act](b);
+});
+function msg(t){ const m = $('#msg'); if (m) m.textContent = t; }
+
+function tecla(v){
+  if (v === 'del') pinBuf = pinBuf.slice(0,-1);
+  else if (pinBuf.length < 4) pinBuf += v;
+  const pts = document.querySelectorAll('#dots i'); pts.forEach((p,i) => p.classList.toggle('on', i < pinBuf.length));
+  if (pinBuf.length === 4){
+    if (pinBuf === cfg.pin){ ir('panel', null, {replace:true}); }
+    else { const d = $('#dots'); d.classList.remove('erro'); void d.offsetWidth; d.classList.add('erro'); pinBuf = ''; setTimeout(() => document.querySelectorAll('#dots i').forEach(p => p.classList.remove('on')), 300); }
+  }
+}
+
+async function adicionar(){
+  const linhas = $('#links').value.split('\n').map(s => s.trim()).filter(Boolean);
+  if (!linhas.length){ msg('Cole pelo menos um link.'); return; }
+  msg('Adicionando…'); let ok = 0, ruim = 0, dup = 0;
+  for (const l of linhas){
+    const p = lerLink(l);
+    if (!p || (p.kind === 'web' && ptipo !== 'jogos')){ ruim++; continue; }
+    const canon = p.kind === 'web' ? p.url : p.kind === 'playlist' ? 'l:'+p.list : 'v:'+p.vid;
+    const id = hash(canon);
+    if (achar(id)){ dup++; continue; }
+    let titulo, img = null;
+    if (p.kind === 'web'){ try{ titulo = new URL(p.url).hostname.replace(/^www\./,''); }catch(e){ titulo = 'Jogo'; } }
+    else {
+      const m = await buscarMeta(p.kind === 'playlist' ? 'https://www.youtube.com/playlist?list='+p.list : 'https://www.youtube.com/watch?v='+p.vid);
+      titulo = (m && m.titulo) || (p.kind === 'playlist' ? 'Série sem título' : 'Vídeo sem título'); img = m ? m.capa : null;
+    }
+    const it = {id, tipo:ptipo, titulo, kind:p.kind};
+    if (p.vid) it.vid = p.vid; if (p.list) it.list = p.list; if (p.url) it.url = p.url; if (img) it.capa = img;
+    extras.push(it); ok++;
+  }
+  store.set('extras', extras); $('#lista').innerHTML = listaHtml();
+  if (ok) $('#links').value = '';
+  msg([ok && `${ok} adicionado(s)`, dup && `${dup} já existia(m)`, ruim && `${ruim} link(s) inválido(s)${ptipo!=='jogos'?' (use links do YouTube)':''}`].filter(Boolean).join(' · ') + '.');
+}
+
+/* ---------- Jogos ---------- */
+const FORMAS = [
+  '<circle cx="32" cy="32" r="20" fill="#ff5c5c"/>',
+  '<rect x="12" y="12" width="40" height="40" rx="6" fill="#4d8bff"/>',
+  '<polygon points="32,10 56,52 8,52" fill="#3ccf7a"/>',
+  '<polygon points="32,6 39,24 58,25 43,37 48,56 32,45 16,56 21,37 6,25 25,24" fill="#ffc933"/>',
+  '<path d="M32 54C8 36 10 14 24 14c5 0 8 4 8 4s3-4 8-4c14 0 16 22-8 40z" fill="#ff7ab8"/>',
+  '<polygon points="32,6 56,32 32,58 8,32" fill="#a86bff"/>'
+];
+function memoria(box){
+  const baralho = [...FORMAS.keys(), ...FORMAS.keys()].sort(() => Math.random() - .5);
+  let abertas = [], achadas = 0, trava = false;
+  box.innerHTML = `<div class="grade-mem">${baralho.map((n,i) =>
+    `<button class="carta" data-f data-i="${i}" data-key="m${i}" aria-label="Carta virada para baixo"><span class="verso"></span><span class="frente"><svg viewBox="0 0 64 64" aria-hidden="true">${FORMAS[n]}</svg></span></button>`).join('')}</div>
+    <div class="fim" id="fim" hidden><h3>Parabéns!</h3><button class="btn grande" data-f id="denovo">Jogar de novo</button></div>`;
+  const primeira = box.querySelector('.carta'); if (primeira) primeira.focus({preventScroll:true});
+  box.onclick = e => {
+    if (e.target.closest('#denovo')){ memoria(box); return; }
+    const c = e.target.closest('.carta'); if (!c || trava || c.classList.contains('up')) return;
+    c.classList.add('up'); abertas.push(c);
+    if (abertas.length === 2){
+      trava = true; const [a,b] = abertas;
+      if (baralho[a.dataset.i] === baralho[b.dataset.i]){
+        a.classList.add('par'); b.classList.add('par'); abertas = []; trava = false; achadas++;
+        if (achadas === FORMAS.length){ const f = $('#fim'); f.hidden = false; $('#denovo').focus(); }
+      } else setTimeout(() => { a.classList.remove('up'); b.classList.remove('up'); abertas = []; trava = false; }, 900);
+    }
+  };
+}
+let ac;
+function tom(freq){
+  try{
+    ac = ac || new (window.AudioContext || window.webkitAudioContext)(); if (ac.state === 'suspended') ac.resume();
+    const t = ac.currentTime, o = ac.createOscillator(), o2 = ac.createOscillator(), g = ac.createGain();
+    o.type = 'triangle'; o.frequency.value = freq; o2.type = 'sine'; o2.frequency.value = freq*2;
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.5, t+.01); g.gain.exponentialRampToValueAtTime(.0001, t+1.4);
+    o.connect(g); o2.connect(g); g.connect(ac.destination); o.start(t); o2.start(t); o.stop(t+1.5); o2.stop(t+1.5);
+  }catch(e){}
+}
+function xilofone(box){
+  const notas = [[261.63,'#ff5c5c'],[293.66,'#ff9f1c'],[329.63,'#ffd23f'],[349.23,'#3ccf7a'],[392,'#2ec4b6'],[440,'#4d8bff'],[493.88,'#a86bff'],[523.25,'#ff7ab8']];
+  box.innerHTML = `<div class="xilo">${notas.map(([f,c],i) => `<button class="barra-n" data-f data-nota="${i}" data-key="n${i}" style="--c:${c};--h:${100-i*6}%" aria-label="Nota ${i+1}"></button>`).join('')}</div>`;
+  const p = box.querySelector('.barra-n'); if (p) p.focus({preventScroll:true});
+  box.onclick = e => {
+    const b = e.target.closest('.barra-n'); if (!b) return;
+    tom(notas[b.dataset.nota][0]); b.classList.remove('bate'); void b.offsetWidth; b.classList.add('bate');
+  };
+}
+
+/* ---------- Navegação por setas (controle remoto) ---------- */
+function mover(dir){
+  const els = [...document.querySelectorAll('[data-f]')].filter(e => e.offsetParent !== null && !e.hidden);
+  const cur = document.activeElement;
+  if (!els.includes(cur)){ if (els[0]) els[0].focus({preventScroll:true}); return; }
+  const r = cur.getBoundingClientRect(), cx = r.left + r.width/2, cy = r.top + r.height/2;
+  let melhor = null, nota = Infinity;
+  for (const e of els){
+    if (e === cur) continue;
+    const b = e.getBoundingClientRect(), dx = b.left + b.width/2 - cx, dy = b.top + b.height/2 - cy;
+    let principal, cruz;
+    if (dir === 'left'){ if (dx > -2) continue; principal = -dx; cruz = Math.abs(dy); }
+    else if (dir === 'right'){ if (dx < 2) continue; principal = dx; cruz = Math.abs(dy); }
+    else if (dir === 'up'){ if (dy > -2) continue; principal = -dy; cruz = Math.abs(dx); }
+    else { if (dy < 2) continue; principal = dy; cruz = Math.abs(dx); }
+    const s = principal + cruz*2.5;
+    if (s < nota){ nota = s; melhor = e; }
+  }
+  if (melhor){ melhor.focus({preventScroll:true}); melhor.scrollIntoView({block:'nearest', inline:'nearest', behavior:'smooth'}); }
+}
+document.addEventListener('keydown', e => {
+  const tag = (e.target.tagName || '').toLowerCase();
+  const emCampo = tag === 'input' || tag === 'textarea' || tag === 'select';
+  if (atual.nome === 'pin' && !emCampo){
+    if (/^\d$/.test(e.key)){ tecla(e.key); return; }
+    if (e.key === 'Backspace'){ e.preventDefault(); tecla('del'); return; }
+  }
+  if (emCampo){ if (e.key === 'Escape') e.target.blur(); return; }
+  const dirs = {ArrowLeft:'left', ArrowRight:'right', ArrowUp:'up', ArrowDown:'down'};
+  if (dirs[e.key]){ e.preventDefault(); mover(dirs[e.key]); return; }
+  if (['Escape','Backspace','BrowserBack','GoBack'].includes(e.key) || [10009,461,27].includes(e.keyCode)){ e.preventDefault(); voltar(); return; }
+  if (e.key === 'Enter' && document.activeElement && document.activeElement.tagName === 'DIV') document.activeElement.click();
+});
+window.addEventListener('pagehide', () => store.set('uso', uso));
+
+/* ---------- Início ---------- */
+(async function(){
+  try{
+    const r = await fetch('catalogo.json', {cache:'no-store'});
+    if (r.ok){ const j = await r.json(); if (Array.isArray(j)) arquivo = j.filter(x => x && x.id && TIPOS[x.tipo] && x.titulo); }
+  }catch(e){}
+  render();
+})();
+</script>
+</body>
+</html>
