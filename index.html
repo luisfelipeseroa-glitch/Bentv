@@ -237,7 +237,7 @@ const telas = {
     const sb = it.kind === 'web' ? 'allow-scripts allow-same-origin allow-forms allow-pointer-lock' : 'allow-scripts allow-same-origin allow-presentation';
     return `<main class="tela play">
       <div class="barra"><button class="btn" data-f data-first data-act="voltar" data-key="v">‹ Voltar</button><h2>${esc(it.titulo)}</h2></div>
-      <div class="palco" data-f tabindex="0" data-act="video"><iframe title="${esc(it.titulo)}" src="${esc(embed(it))}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" sandbox="${sb}"></iframe></div>
+      <div class="palco" data-f tabindex="0" data-act="video"><iframe title="${esc(it.titulo)}" src="${esc(embed(it))}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gamepad" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" sandbox="${sb}"></iframe></div>
     </main>`;
   },
   jogo(id){
