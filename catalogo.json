@@ -6,5 +6,12 @@
     "kind": "video",
     "vid": "ee3RsCeKf0Q",
     "capa": "https://i.ytimg.com/vi/ee3RsCeKf0Q/hqdefault.jpg"
+  },
+  {
+    "id": "a4h8cy",
+    "tipo": "jogos",
+    "titulo": "PES 6 (futebol)",
+    "kind": "web",
+    "url": "https://pes6.optijuegos.net/"
   }
 ]
