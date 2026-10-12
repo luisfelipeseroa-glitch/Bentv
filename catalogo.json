@@ -9,6 +9,15 @@
     "capa": "https://i.ytimg.com/vi/ee3RsCeKf0Q/hqdefault.jpg"
   },
   {
+    "id": "asyo36",
+    "tipo": "filmes",
+    "pasta": "Mario Bros",
+    "titulo": "O Filme",
+    "kind": "video",
+    "vid": "ee3RsCeKf0Q",
+    "capa": "https://youtu.be/vs3HOsj4EgM"
+  },
+  {
     "id": "a4h8cy",
     "tipo": "jogos",
     "titulo": "PES 6 (futebol)",
