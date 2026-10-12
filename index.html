@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@600;800&family=Titan+One&display=swap" rel="stylesheet">
 <style>
 /* Layout: telas cheias para TV, navegação por setas do controle, foco sempre bem visível */
 :root{
@@ -41,14 +41,21 @@ h1,h2,h3{font-family:var(--display);margin:0;font-weight:800;text-wrap:balance}
 /* Início (estilo Google TV): abas no topo, banner e filas horizontais */
 .tela.hub{padding:0 0 4vh;gap:0}
 .nav{display:flex;align-items:center;gap:.4rem;padding:3vh 4vw 1vh;flex-wrap:wrap}
-.nav .marca{font-family:var(--display);font-weight:800;font-size:1.3rem;color:var(--muted);margin-right:1.2rem;letter-spacing:.02em}
+.nav .marca{display:flex;align-items:center;gap:.7rem;margin-right:1.2rem}
+.marca .ic{width:2.6rem;height:2.6rem;border-radius:50%;display:block}
+/* Logotipo: letra grossa estilo videogame, degradê de azul para verde, contorno azul-marinho */
+.logo{position:relative;display:inline-block;margin:.12em .1em .2em;font-family:'Titan One','Baloo 2','Arial Black',system-ui,sans-serif;font-weight:400;line-height:1;letter-spacing:.03em;white-space:nowrap}
+.logo::before{content:attr(data-t);position:absolute;left:0;top:0;color:#0a1a52;-webkit-text-stroke:.3em #0a1a52;text-shadow:0 .1em 0 #0a1a52,0 .18em .15em rgba(0,0,0,.4)}
+.logo>span{position:relative;display:block;background:linear-gradient(100deg,#2f6bff 0%,#22b8ff 38%,#2de3a2 72%,#4ce36b 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.logo.grande{font-size:clamp(2.8rem,6.2vw,5rem)}
+.logo.mini{font-size:1.6rem}
 .aba{background:none;border:0;border-radius:999px;padding:.45rem 1.2rem;font-family:var(--display);font-weight:800;font-size:1.2rem;color:var(--ink)}
 .aba.on{background:#f4f1ff;color:#17143a}
 .nav .esp{flex:1}
-.hero{margin:1vh 4vw 2vh;height:clamp(13rem,34vh,22rem);display:flex;align-items:center;justify-content:center;gap:2.2rem;border-radius:1.6rem;overflow:hidden;padding:0 2rem;background:radial-gradient(60% 120% at 12% 60%,rgba(58,134,255,.55),transparent 70%),radial-gradient(60% 120% at 88% 70%,rgba(255,106,61,.5),transparent 70%),#0e0c24}
-.hero b{font-family:var(--display);font-weight:800;font-size:clamp(3rem,8vw,6.5rem);line-height:1;letter-spacing:.01em}
+.hero{margin:1vh 4vw 2vh;min-height:clamp(13rem,34vh,22rem);display:flex;flex-wrap:wrap;align-content:center;align-items:center;justify-content:center;gap:1rem 2.2rem;border-radius:1.6rem;overflow:hidden;padding:0 2rem;background:radial-gradient(60% 120% at 12% 60%,rgba(58,134,255,.55),transparent 70%),radial-gradient(60% 120% at 88% 70%,rgba(255,106,61,.5),transparent 70%),#0e0c24}
+.hero .ic{width:clamp(4rem,9vw,7rem);height:auto;aspect-ratio:1;border-radius:50%;box-shadow:0 .6rem 1.4rem rgba(0,0,0,.45)}
 .hero i{width:.12rem;align-self:stretch;margin:2.2rem 0;background:rgba(255,255,255,.6)}
-.hero span{font-family:var(--display);font-weight:600;font-size:clamp(1.6rem,4vw,3.4rem);line-height:1.05;max-width:12ch}
+.hero .frase{font-family:var(--display);font-weight:600;font-size:clamp(1.4rem,3vw,2.6rem);line-height:1.05}
 .fila-t{padding:0 4vw;margin:1.2vh 0 .4rem;font-size:1rem;color:var(--muted)}
 .fila{display:flex;gap:1.3rem;overflow-x:auto;padding:.9rem 4vw 1.3rem;scrollbar-width:none;scroll-padding:0 4vw}
 .fila::-webkit-scrollbar{display:none}
@@ -57,6 +64,7 @@ h1,h2,h3{font-family:var(--display);margin:0;font-weight:800;text-wrap:balance}
 .atalho svg{width:42%;height:auto}
 .atalho.jg svg{width:72%}
 .atalho span{font-family:var(--display);font-weight:800;font-size:1.05rem;text-align:center;line-height:1.1}
+@media (max-width:700px){.hero i{display:none}.nav .marca{width:100%;margin-bottom:.3rem}.nav .esp{display:none}.nav .btn{margin-left:auto}.aba{padding:.4rem .85rem;font-size:1.05rem}}
 .tela.hub .grade{padding:1rem 4vw}
 .tela.hub .vazio{padding:1rem 4vw}
 
@@ -136,7 +144,7 @@ textarea{min-height:7rem;resize:vertical}
 <div id="app"></div>
 <script>
 /* ---------- Configuração fácil ---------- */
-const NOME_APP = 'Cantinho';
+const NOME_APP = 'BenTube';
 const FRASE = 'hora de brincar';
 
 const TIPOS = {
@@ -155,8 +163,8 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>'
 const hash = s => { let h = 0; for (const c of s) h = (h*31 + c.charCodeAt(0)) | 0; return Math.abs(h).toString(36); };
 const hoje = () => { const d = new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
 const store = {
-  get(k, d){ try{ const v = localStorage.getItem('cantinho.'+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
-  set(k, v){ try{ localStorage.setItem('cantinho.'+k, JSON.stringify(v)); }catch(e){} }
+  get(k, d){ try{ const v = localStorage.getItem('bentube.'+k) || localStorage.getItem('cantinho.'+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem('bentube.'+k, JSON.stringify(v)); }catch(e){} }
 };
 const PALETAS = [['#ff7a59','#ff4f7b'],['#ffc933','#ff9f1c'],['#2ec4b6','#3a86ff'],['#a86bff','#ff7ab8'],['#3ccf7a','#2ec4b6']];
 
@@ -241,7 +249,7 @@ const telas = {
       + JOGOS.map(g =>
         `<button class="atalho jg" data-f data-act="jogo" data-v="${g.id}" data-key="g-${g.id}" style="--c1:${g.c1};--c2:${g.c2}">${MINI[g.id]}<span>${esc(g.titulo)}</span></button>`).join('');
     return `<main class="tela hub">${navHtml('inicio', !itens.length)}
-      <section class="hero" aria-label="${esc(NOME_APP)}"><b>${esc(NOME_APP)}</b><i></i><span>${esc(FRASE)}</span></section>
+      <section class="hero" aria-label="${esc(NOME_APP)}"><img class="ic" src="icon-192.png" alt=""><span class="logo grande" data-t="${esc(NOME_APP)}"><span>${esc(NOME_APP)}</span></span><i></i><span class="frase">${esc(FRASE)}</span></section>
       <h2 class="fila-t">Para você</h2>${fila}
       <h2 class="fila-t">Seus atalhos</h2><div class="fila">${atalhos}</div>
     </main>`;
@@ -321,7 +329,7 @@ const telas = {
 };
 function navHtml(aba, tabPrimeiro){
   const abas = [['inicio','Início']].concat(Object.entries(TIPOS).map(([k,t]) => [k, t.nome]));
-  return `<header class="nav"><span class="marca">${esc(NOME_APP)}</span>${abas.map(([k,n]) =>
+  return `<header class="nav"><span class="marca"><img class="ic" src="icon-192.png" alt=""><span class="logo mini" data-t="${esc(NOME_APP)}"><span>${esc(NOME_APP)}</span></span></span>${abas.map(([k,n]) =>
     `<button class="aba ${k===aba?'on':''}" data-f ${k===aba&&tabPrimeiro?'data-first':''} data-act="aba" data-v="${k}" data-key="tab-${k}">${n}</button>`).join('')}<span class="esp"></span><button class="btn mini" data-f data-act="pais" data-key="pais" aria-label="Área dos pais">${ICONES.cadeado} Pais</button></header>`;
 }
 const cmp = (a, b) => String(a).localeCompare(String(b), 'pt-BR', {sensitivity:'base', numeric:true});
