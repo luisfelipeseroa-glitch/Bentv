@@ -2,6 +2,7 @@
   {
     "id": "asyo36",
     "tipo": "series",
+    "pasta": "Bluey",
     "titulo": "É a vez do Bingo cuidar do Bob Bilby!",
     "kind": "video",
     "vid": "ee3RsCeKf0Q",
@@ -13,5 +14,131 @@
     "titulo": "PES 6 (futebol)",
     "kind": "web",
     "url": "https://pes6.optijuegos.net/"
+  },
+  {
+    "id": "jdjv8n",
+    "tipo": "series",
+    "pasta": "Patrulha Canina",
+    "titulo": "Os filhotes conhecem o Rubble",
+    "kind": "video",
+    "vid": "JkGnNSUhly8",
+    "capa": "https://i.ytimg.com/vi/JkGnNSUhly8/hqdefault.jpg"
+  },
+  {
+    "id": "gghv4s",
+    "tipo": "series",
+    "pasta": "Patrulha Canina",
+    "titulo": "Os filhotes salvam os pinguins",
+    "kind": "video",
+    "vid": "GkneOc-tWm4",
+    "capa": "https://i.ytimg.com/vi/GkneOc-tWm4/hqdefault.jpg"
+  },
+  {
+    "id": "au6rjo",
+    "tipo": "series",
+    "pasta": "Patrulha Canina",
+    "titulo": "Os filhotes salvam um alienígena!",
+    "kind": "video",
+    "vid": "0mZTFPwd0CQ",
+    "capa": "https://i.ytimg.com/vi/0mZTFPwd0CQ/hqdefault.jpg"
+  },
+  {
+    "id": "l2a1fu",
+    "tipo": "series",
+    "pasta": "Patrulha Canina",
+    "titulo": "Filhotes salvam um filhote de golfinho",
+    "kind": "video",
+    "vid": "aWX9Op1FqN8",
+    "capa": "https://i.ytimg.com/vi/aWX9Op1FqN8/hqdefault.jpg"
+  },
+  {
+    "id": "tftn2r",
+    "tipo": "series",
+    "pasta": "Patrulha Canina",
+    "titulo": "Filhotes e o tesouro do pirata",
+    "kind": "video",
+    "vid": "7w6RqAywUR8",
+    "capa": "https://i.ytimg.com/vi/7w6RqAywUR8/hqdefault.jpg"
+  },
+  {
+    "id": "118scc",
+    "tipo": "series",
+    "pasta": "Patrulha Canina",
+    "titulo": "Filhotes salvam uma morsa",
+    "kind": "video",
+    "vid": "LcLEpDPUqYY",
+    "capa": "https://i.ytimg.com/vi/LcLEpDPUqYY/hqdefault.jpg"
+  },
+  {
+    "id": "qiv70u",
+    "tipo": "series",
+    "pasta": "Bluey",
+    "titulo": "A hora da história tranquila",
+    "kind": "video",
+    "vid": "UBnQq0zbvxk",
+    "capa": "https://i.ytimg.com/vi/UBnQq0zbvxk/hqdefault.jpg"
+  },
+  {
+    "id": "uw8icl",
+    "tipo": "series",
+    "pasta": "Bluey",
+    "titulo": "Bluey tenta ser corajosa no cinema (30 min)",
+    "kind": "video",
+    "vid": "Yb5b-hSsBaY",
+    "capa": "https://i.ytimg.com/vi/Yb5b-hSsBaY/hqdefault.jpg"
+  },
+  {
+    "id": "5t8d7y",
+    "tipo": "series",
+    "pasta": "Bluey",
+    "titulo": "Melhor da Série 1 (40 min)",
+    "kind": "video",
+    "vid": "QEU5T2X55MY",
+    "capa": "https://i.ytimg.com/vi/QEU5T2X55MY/hqdefault.jpg"
+  },
+  {
+    "id": "jj2k0m",
+    "tipo": "series",
+    "pasta": "Bluey",
+    "titulo": "Melhor da Série 2 (40 min)",
+    "kind": "video",
+    "vid": "NopTW6G2k9w",
+    "capa": "https://i.ytimg.com/vi/NopTW6G2k9w/hqdefault.jpg"
+  },
+  {
+    "id": "c42oso",
+    "tipo": "series",
+    "pasta": "Bluey",
+    "titulo": "Divertão à Noite",
+    "kind": "video",
+    "vid": "fYJD9aRRwV0",
+    "capa": "https://i.ytimg.com/vi/fYJD9aRRwV0/hqdefault.jpg"
+  },
+  {
+    "id": "b1q1mf",
+    "tipo": "series",
+    "pasta": "Bluey",
+    "titulo": "Conversa Virtual",
+    "kind": "video",
+    "vid": "x7gonAtXAN8",
+    "capa": "https://i.ytimg.com/vi/x7gonAtXAN8/hqdefault.jpg"
+  },
+  {
+    "id": "1m56qy",
+    "tipo": "series",
+    "pasta": "Bluey",
+    "titulo": "Jogando Jogos com Bluey e Bingo!",
+    "kind": "video",
+    "vid": "g36UFH2AXSQ",
+    "capa": "https://i.ytimg.com/vi/g36UFH2AXSQ/hqdefault.jpg"
+  },
+  {
+    "id": "ive0cf",
+    "tipo": "series",
+    "pasta": "Bluey",
+    "titulo": "Que vovó rabugenta (com a Muffin)",
+    "kind": "video",
+    "vid": "i3RKOWOjlw4",
+    "capa": "https://i.ytimg.com/vi/i3RKOWOjlw4/hqdefault.jpg"
   }
 ]
