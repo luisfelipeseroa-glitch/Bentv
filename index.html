@@ -64,6 +64,11 @@ h1,h2,h3{font-family:var(--display);margin:0;font-weight:800;text-wrap:balance}
 .nome{font-family:var(--display);font-weight:800;font-size:1.15rem;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .vazio{max-width:34rem;font-size:1.3rem;color:var(--muted);line-height:1.5}
 
+.thumb.pasta img{filter:brightness(.5) saturate(.9)}
+.thumb.pasta .pi{position:absolute;inset:0;display:grid;place-items:center}
+.thumb.pasta .pi svg{width:26%;height:auto;filter:drop-shadow(0 .2rem 0 rgba(0,0,0,.25))}
+.selo{position:absolute;left:.8rem;bottom:.6rem;font-family:var(--display);font-weight:800;font-size:1rem;color:#fff;text-shadow:0 .1rem .3rem rgba(0,0,0,.6)}
+
 /* Player */
 .play{height:100%;min-height:0}
 .barra{display:flex;align-items:center;gap:1.2rem;min-width:0}
@@ -198,6 +203,7 @@ const ICONES = {
   series:'<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M22 8l10 10 10-10" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="6" y="18" width="52" height="38" rx="8" fill="#fff"/><polygon points="26,28 26,46 42,37" fill="var(--c1)"/></svg>',
   filmes:'<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="8" y="26" width="48" height="30" rx="5" fill="#fff"/><path d="M8 14l40-6 3 12-40 6z" fill="#fff"/><path d="M18 12l6 8M30 10l6 8M42 8l6 8" stroke="var(--c1)" stroke-width="4" stroke-linecap="round"/><polygon points="28,34 28,48 40,41" fill="var(--c1)"/></svg>',
   jogos:'<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="18" width="56" height="30" rx="15" fill="#fff"/><rect x="14" y="29" width="14" height="5" rx="2" fill="var(--c1)"/><rect x="18.5" y="24.5" width="5" height="14" rx="2" fill="var(--c1)"/><circle cx="43" cy="28" r="4" fill="var(--c1)"/><circle cx="51" cy="35" r="4" fill="var(--c1)"/></svg>',
+  pasta:'<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M6 18a5 5 0 0 1 5-5h14l6 7h22a5 5 0 0 1 5 5v26a5 5 0 0 1-5 5H11a5 5 0 0 1-5-5z" fill="#fff"/></svg>',
   lua:'<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M44 8a26 26 0 1 0 12 40A22 22 0 0 1 44 8z" fill="#ffc933"/></svg>',
   cadeado:'<svg viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg>'
 };
@@ -213,14 +219,14 @@ const telas = {
     if (aba !== 'inicio'){
       const lista = todos().filter(i => i.tipo === aba);
       const jogos = aba === 'jogos' ? JOGOS.map((g,i) => cartaoJogo(g, i===0)).join('') : '';
-      const cards = jogos + lista.map((it,i) => cartao(it, !jogos && i===0)).join('');
+      const cards = jogos + agrupar(lista).map((g,i) => cartaoGrupo(g, !jogos && i===0)).join('');
       return `<main class="tela hub">${navHtml(aba, !cards)}
         ${cards ? `<div class="grade">${cards}</div>` : `<p class="vazio">Ainda não tem nada aqui. Peça para um adulto adicionar na área dos pais.</p>`}
       </main>`;
     }
-    const itens = todos().slice(0, 14);
+    const itens = agrupar(todos()).slice(0, 14);
     const fila = itens.length
-      ? `<div class="fila">${itens.map((it,i) => cartao(it, i===0)).join('')}</div>`
+      ? `<div class="fila">${itens.map((g,i) => cartaoGrupo(g, i===0)).join('')}</div>`
       : `<p class="vazio">Ainda não tem vídeos aqui. Peça para um adulto adicionar na área dos pais.</p>`;
     const atalhos = Object.entries(TIPOS).map(([k,t]) =>
         `<button class="atalho" data-f data-act="aba" data-v="${k}" data-key="at-${k}" style="--c1:${t.c1};--c2:${t.c2}">${ICONES[k]}<span>${t.nome}</span></button>`).join('')
@@ -230,6 +236,13 @@ const telas = {
       <section class="hero" aria-label="${esc(NOME_APP)}"><b>${esc(NOME_APP)}</b><i></i><span>${esc(FRASE)}</span></section>
       <h2 class="fila-t">Para você</h2>${fila}
       <h2 class="fila-t">Seus atalhos</h2><div class="fila">${atalhos}</div>
+    </main>`;
+  },
+  pasta(arg){
+    const lista = todos().filter(i => i.tipo === arg.tipo && i.pasta === arg.nome).sort((a,b) => cmp(a.titulo, b.titulo));
+    return `<main class="tela">
+      <div class="cab"><button class="btn" data-f ${lista.length?'':'data-first'} data-act="voltar" data-key="v">‹ Voltar</button><h2>${esc(arg.nome)}</h2></div>
+      ${lista.length ? `<div class="grade">${lista.map((it,i) => cartao(it, i===0)).join('')}</div>` : `<p class="vazio">Esta pasta está vazia.</p>`}
     </main>`;
   },
   play(id){
@@ -274,6 +287,7 @@ const telas = {
         <section class="bloco"><h3>Adicionar conteúdo</h3>
           <p>Cole links do YouTube, um por linha. Link de playlist vira uma série inteira. Em Jogos, também aceita o endereço de um jogo HTML5.</p>
           <div class="linha" id="ptipos">${Object.entries(TIPOS).map(([k,t]) => `<button class="btn ${k===ptipo?'sel':''}" data-f data-act="ptipo" data-v="${k}" data-key="pt-${k}">${t.nome}</button>`).join('')}</div>
+          <input id="pasta" data-f maxlength="40" placeholder="Pasta (opcional), ex.: Bluey" aria-label="Nome da pasta">
           <textarea id="links" data-f placeholder="https://www.youtube.com/watch?v=...&#10;https://www.youtube.com/playlist?list=..."></textarea>
           <div class="linha"><button class="btn grande" data-f data-act="adicionar" data-key="add">Adicionar</button><span class="msg" id="msg" role="status"></span></div>
         </section>
@@ -302,6 +316,25 @@ function navHtml(aba, tabPrimeiro){
   return `<header class="nav"><span class="marca">${esc(NOME_APP)}</span>${abas.map(([k,n]) =>
     `<button class="aba ${k===aba?'on':''}" data-f ${k===aba&&tabPrimeiro?'data-first':''} data-act="aba" data-v="${k}" data-key="tab-${k}">${n}</button>`).join('')}<span class="esp"></span><button class="btn mini" data-f data-act="pais" data-key="pais" aria-label="Área dos pais">${ICONES.cadeado} Pais</button></header>`;
 }
+const cmp = (a, b) => String(a).localeCompare(String(b), 'pt-BR', {sensitivity:'base', numeric:true});
+function agrupar(lista){
+  const pastas = new Map(), soltos = [];
+  for (const it of lista){
+    if (it.pasta){
+      const k = it.tipo + '|' + it.pasta;
+      if (!pastas.has(k)) pastas.set(k, {pasta:it.pasta, tipo:it.tipo, itens:[]});
+      pastas.get(k).itens.push(it);
+    } else soltos.push({item:it});
+  }
+  return [...pastas.values()].sort((a,b) => cmp(a.pasta, b.pasta)).concat(soltos);
+}
+function cartaoGrupo(g, primeiro){
+  if (!g.pasta) return cartao(g.item, primeiro);
+  const ord = g.itens.slice().sort((a,b) => cmp(a.titulo, b.titulo));
+  const [c1,c2] = PALETAS[parseInt(hash(g.pasta),36) % PALETAS.length];
+  const img = capa(ord[0]), n = g.itens.length;
+  return `<button class="cartao" data-f ${primeiro?'data-first':''} data-act="pasta" data-v="${esc(g.pasta)}" data-t="${g.tipo}" data-key="p-${g.tipo}-${hash(g.pasta)}"><span class="thumb pasta" style="--c1:${c1};--c2:${c2}">${img ? `<img loading="lazy" src="${esc(img)}" alt="" onerror="this.remove()">` : ''}<span class="pi">${ICONES.pasta}</span><span class="selo">${n} ${n===1?'vídeo':'vídeos'}</span></span><span class="nome">${esc(g.pasta)}</span></button>`;
+}
 function cartaoJogo(g, primeiro){
   return `<button class="cartao" data-f ${primeiro?'data-first':''} data-act="jogo" data-v="${g.id}" data-key="g-${g.id}"><span class="thumb" style="--c1:${g.c1};--c2:${g.c2}">${MINI[g.id]}<span class="tocar"></span></span><span class="nome">${esc(g.titulo)}</span></button>`;
 }
@@ -312,7 +345,7 @@ function cartao(it, primeiro){
 }
 function listaHtml(){
   if (!extras.length) return `<p>Nada adicionado ainda.${arquivo.length ? ' '+arquivo.length+' item(ns) vêm do catalogo.json.' : ''}</p>`;
-  return extras.map(i => `<div class="item"><span><small>${TIPOS[i.tipo].nome}</small>${esc(i.titulo)}</span><button class="btn mini" data-f data-act="rem" data-v="${esc(i.id)}">Remover</button></div>`).join('');
+  return extras.map(i => `<div class="item"><span><small>${TIPOS[i.tipo].nome}${i.pasta ? ' › ' + esc(i.pasta) : ''}</small>${esc(i.titulo)}</span><button class="btn mini" data-f data-act="rem" data-v="${esc(i.id)}">Remover</button></div>`).join('');
 }
 
 /* ---------- Roteador ---------- */
@@ -346,6 +379,7 @@ function contar(){
 
 /* ---------- Ações ---------- */
 const acoes = {
+  pasta: b => ir('pasta', {tipo:b.dataset.t, nome:b.dataset.v}),
   aba: b => { atual = {nome:'home', arg:b.dataset.v}; render('tab-'+b.dataset.v); },
   voltar: () => voltar(),
   abrir: b => esgotado() ? ir('descanso') : ir('play', b.dataset.v),
@@ -384,6 +418,7 @@ function tecla(v){
 async function adicionar(){
   const linhas = $('#links').value.split('\n').map(s => s.trim()).filter(Boolean);
   if (!linhas.length){ msg('Cole pelo menos um link.'); return; }
+  const pasta = ($('#pasta').value || '').trim().slice(0, 40);
   msg('Adicionando…'); let ok = 0, ruim = 0, dup = 0;
   for (const l of linhas){
     const p = lerLink(l);
@@ -397,7 +432,7 @@ async function adicionar(){
       const m = await buscarMeta(p.kind === 'playlist' ? 'https://www.youtube.com/playlist?list='+p.list : 'https://www.youtube.com/watch?v='+p.vid);
       titulo = (m && m.titulo) || (p.kind === 'playlist' ? 'Série sem título' : 'Vídeo sem título'); img = m ? m.capa : null;
     }
-    const it = {id, tipo:ptipo, titulo, kind:p.kind};
+    const it = {id, tipo:ptipo, titulo, kind:p.kind}; if (pasta) it.pasta = pasta;
     if (p.vid) it.vid = p.vid; if (p.list) it.list = p.list; if (p.url) it.url = p.url; if (img) it.capa = img;
     extras.push(it); ok++;
   }
