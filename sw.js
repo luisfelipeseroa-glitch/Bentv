@@ -1,5 +1,5 @@
-/* Service worker do Cantinho: rede primeiro (atualizações aparecem na hora), cache só como reserva sem internet. */
-const V = 'cantinho-v1';
+/* Service worker do BenTube: rede primeiro (atualizações aparecem na hora), cache só como reserva sem internet. */
+const V = 'bentube-v1';
 const BASE = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {
