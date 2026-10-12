@@ -140,5 +140,48 @@
     "kind": "video",
     "vid": "i3RKOWOjlw4",
     "capa": "https://i.ytimg.com/vi/i3RKOWOjlw4/hqdefault.jpg"
+  },
+  {
+    "id": "wgmqhz",
+    "tipo": "series",
+    "titulo": "Eu Quero Ser Policial 👮‍♂️🚨 A Aventura Mágica do Dodo no Corpo do Detetive 🔍 Detetive Labrador",
+    "kind": "video",
+    "pasta": "Detetive Labrador",
+    "vid": "QlDC3HJ3G40",
+    "capa": "https://i.ytimg.com/vi/QlDC3HJ3G40/hqdefault.jpg"
+  },
+  {
+    "id": "aw3bp7",
+    "tipo": "series",
+    "titulo": "A Torneira Mágica de Slime 🧼 Diário de Crescimento do Dodo 🎬 Desenho Animado 🔍 Detetive Labrador",
+    "kind": "video",
+    "pasta": "Detetive Labrador",
+    "vid": "JcbZy5XEmoE",
+    "capa": "https://i.ytimg.com/vi/JcbZy5XEmoE/hqdefault.jpg"
+  },
+  {
+    "id": "veljb3",
+    "tipo": "series",
+    "titulo": "Detetive Labrador 🔍 Missão Patrulha (Episódio 11) 🚓 Creça Creça Plantinha 🎬 Desenho Animado",
+    "kind": "video",
+    "pasta": "Detetive Labrador",
+    "vid": "JwuxK-zLY7g",
+    "capa": "https://i.ytimg.com/vi/JwuxK-zLY7g/hqdefault.jpg"
+  },
+  {
+    "id": "dwvmch",
+    "tipo": "jogos",
+    "titulo": "minijogos.com.br",
+    "kind": "web",
+    "pasta": "Mario Kart",
+    "url": "https://www.minijogos.com.br/jogo/mario-kart-64-amped-up/jogar"
+  },
+  {
+    "id": "xh7pl3",
+    "tipo": "jogos",
+    "titulo": "minijogos.com.br",
+    "kind": "web",
+    "pasta": "Mario Odissey",
+    "url": "https://www.minijogos.com.br/jogo/super-mario-odyssey-64/jogar"
   }
 ]
