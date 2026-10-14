@@ -340,7 +340,7 @@ const telas = {
       <div class="cab"><button class="btn" data-f data-first data-act="voltar" data-key="v">‹ Voltar</button><h2>Área dos pais</h2></div>
       <div class="painel" style="display:flex;flex-direction:column;gap:1.4rem">
         <section class="bloco"><h3>Adicionar conteúdo</h3>
-          <p>Cole links do YouTube, um por linha. Link de playlist vira uma série inteira. Em Jogos, também aceita o endereço de um jogo HTML5.</p>
+          <p>Cole links do YouTube, um por linha. Link de playlist vira uma série inteira. Em Jogos, também aceita o endereço de um jogo HTML5 (ele abre em tela cheia, fora do app).</p>
           <div class="linha" id="ptipos">${Object.entries(TIPOS).map(([k,t]) => `<button class="btn ${k===ptipo?'sel':''}" data-f data-act="ptipo" data-v="${k}" data-key="pt-${k}">${t.nome}</button>`).join('')}</div>
           <input id="pasta" data-f maxlength="40" placeholder="Pasta (opcional), ex.: Bluey" aria-label="Nome da pasta">
           <textarea id="links" data-f placeholder="https://www.youtube.com/watch?v=...&#10;https://www.youtube.com/playlist?list=..."></textarea>
@@ -437,7 +437,13 @@ const acoes = {
   pasta: b => ir('pasta', {tipo:b.dataset.t, nome:b.dataset.v}),
   aba: b => { atual = {nome:'home', arg:b.dataset.v}; render('tab-'+b.dataset.v); },
   voltar: () => voltar(),
-  abrir: b => esgotado() ? ir('descanso') : ir('play', b.dataset.v),
+  abrir: b => {
+    if (esgotado()){ ir('descanso'); return; }
+    const it = achar(b.dataset.v);
+    // Jogos de outros sites: muitos bloqueiam ser abertos dentro de outra página, então abre direto (o Voltar do navegador volta para cá)
+    if (it && it.kind === 'web'){ store.set('uso', uso); location.href = it.url; return; }
+    ir('play', b.dataset.v);
+  },
   jogo: b => esgotado() ? ir('descanso') : ir('jogo', b.dataset.v),
   video: () => { const f = $('.palco iframe'); if (f) f.focus(); },
   pais: () => ir('pin'),
