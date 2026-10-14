@@ -25,7 +25,10 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-html{font-size:clamp(15px,1.55vw,30px);height:100%}
+[hidden]{display:none!important}
+html{font-size:15px;height:100%}
+@media (min-width:970px){html{font-size:1.55vw}}
+@media (min-width:1936px){html{font-size:30px}}
 body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--body);font-weight:600;overflow:hidden;-webkit-tap-highlight-color:transparent}
 #app{height:100%;overflow-y:auto;overflow-x:hidden;background:radial-gradient(120% 90% at 85% -10%,var(--bg2) 0%,var(--bg) 60%)}
 button{font:inherit;color:inherit;cursor:pointer}
@@ -47,20 +50,20 @@ h1,h2,h3{font-family:var(--display);margin:0;font-weight:800;text-wrap:balance}
 .logo{position:relative;display:inline-block;margin:.12em .1em .2em;font-family:'Titan One','Baloo 2','Arial Black',system-ui,sans-serif;font-weight:400;line-height:1;letter-spacing:.03em;white-space:nowrap}
 .logo::before{content:attr(data-t);position:absolute;left:0;top:0;color:#0a1a52;-webkit-text-stroke:.3em #0a1a52;text-shadow:0 .1em 0 #0a1a52,0 .18em .15em rgba(0,0,0,.4)}
 .logo>span{position:relative;display:block;background:linear-gradient(100deg,#2f6bff 0%,#22b8ff 38%,#2de3a2 72%,#4ce36b 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
-.logo.grande{font-size:clamp(2.8rem,6.2vw,5rem)}
+.logo.grande{font-size:6.2vw;font-size:clamp(2.8rem,6.2vw,5rem)}
 .logo.mini{font-size:1.6rem}
 .aba{background:none;border:0;border-radius:999px;padding:.45rem 1.2rem;font-family:var(--display);font-weight:800;font-size:1.2rem;color:var(--ink)}
 .aba.on{background:#f4f1ff;color:#17143a}
 .nav .esp{flex:1}
-.hero{margin:1vh 4vw 2vh;min-height:clamp(13rem,34vh,22rem);display:flex;flex-wrap:wrap;align-content:center;align-items:center;justify-content:center;gap:1rem 2.2rem;border-radius:1.6rem;overflow:hidden;padding:0 2rem;background:radial-gradient(60% 120% at 12% 60%,rgba(58,134,255,.55),transparent 70%),radial-gradient(60% 120% at 88% 70%,rgba(255,106,61,.5),transparent 70%),#0e0c24}
-.hero .ic{width:clamp(4rem,9vw,7rem);height:auto;aspect-ratio:1;border-radius:50%;box-shadow:0 .6rem 1.4rem rgba(0,0,0,.45)}
+.hero{margin:1vh 4vw 2vh;min-height:34vh;min-height:clamp(13rem,34vh,22rem);display:flex;flex-wrap:wrap;align-content:center;align-items:center;justify-content:center;gap:1rem 2.2rem;border-radius:1.6rem;overflow:hidden;padding:0 2rem;background:radial-gradient(60% 120% at 12% 60%,rgba(58,134,255,.55),transparent 70%),radial-gradient(60% 120% at 88% 70%,rgba(255,106,61,.5),transparent 70%),#0e0c24}
+.hero .ic{width:9vw;width:clamp(4rem,9vw,7rem);height:auto;aspect-ratio:1;border-radius:50%;box-shadow:0 .6rem 1.4rem rgba(0,0,0,.45)}
 .hero i{width:.12rem;align-self:stretch;margin:2.2rem 0;background:rgba(255,255,255,.6)}
-.hero .frase{font-family:var(--display);font-weight:600;font-size:clamp(1.4rem,3vw,2.6rem);line-height:1.05}
+.hero .frase{font-family:var(--display);font-weight:600;font-size:3vw;font-size:clamp(1.4rem,3vw,2.6rem);line-height:1.05}
 .fila-t{padding:0 4vw;margin:1.2vh 0 .4rem;font-size:1rem;color:var(--muted)}
 .fila{display:flex;gap:1.3rem;overflow-x:auto;padding:.9rem 4vw 1.3rem;scrollbar-width:none;scroll-padding:0 4vw}
 .fila::-webkit-scrollbar{display:none}
-.fila .cartao{flex:0 0 clamp(13rem,19vw,22rem)}
-.atalho{flex:0 0 clamp(8rem,12vw,13rem);aspect-ratio:16/10;border:0;border-radius:1rem;background:linear-gradient(150deg,var(--c1),var(--c2));color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;padding:.5rem}
+.fila .cartao{flex:0 0 19vw;flex:0 0 clamp(13rem,19vw,22rem)}
+.atalho{flex:0 0 12vw;flex:0 0 clamp(8rem,12vw,13rem);aspect-ratio:16/10;border:0;border-radius:1rem;background:linear-gradient(150deg,var(--c1),var(--c2));color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;padding:.5rem}
 .atalho svg{width:42%;height:auto}
 .atalho.jg svg{width:72%}
 .atalho span{font-family:var(--display);font-weight:800;font-size:1.05rem;text-align:center;line-height:1.1}
@@ -70,18 +73,18 @@ h1,h2,h3{font-family:var(--display);margin:0;font-weight:800;text-wrap:balance}
 
 /* Categoria */
 .cab{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
-.cab h2{font-size:clamp(1.8rem,3.5vw,3rem)}
-.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(14rem,24vw,24rem),1fr));gap:2rem 1.6rem;padding:.4rem}
+.cab h2{font-size:3.5vw;font-size:clamp(1.8rem,3.5vw,3rem)}
+.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(24vw,1fr));grid-template-columns:repeat(auto-fill,minmax(clamp(14rem,24vw,24rem),1fr));gap:2rem 1.6rem;padding:.4rem}
 .cartao{background:none;border:0;padding:0;text-align:left;display:flex;flex-direction:column;gap:.6rem;min-width:0}
 .thumb{aspect-ratio:16/9;max-width:100%;border-radius:1.1rem;background:linear-gradient(135deg,var(--c1),var(--c2));overflow:hidden;position:relative;display:block}
 .thumb img,.thumb svg{width:100%;height:100%;object-fit:cover;display:block}
 .tocar{position:absolute;right:.7rem;bottom:.7rem;width:2.4rem;height:2.4rem;border-radius:50%;background:rgba(255,255,255,.95)}
-.tocar::after{content:"";position:absolute;inset:0;background:var(--bg);clip-path:polygon(38% 28%,38% 72%,72% 50%);}
+.tocar::after{content:"";position:absolute;top:0;right:0;bottom:0;left:0;background:var(--bg);clip-path:polygon(38% 28%,38% 72%,72% 50%);}
 .nome{font-family:var(--display);font-weight:800;font-size:1.15rem;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .vazio{max-width:34rem;font-size:1.3rem;color:var(--muted);line-height:1.5}
 
 .thumb.pasta img{filter:brightness(.5) saturate(.9)}
-.thumb.pasta .pi{position:absolute;inset:0;display:grid;place-items:center}
+.thumb.pasta .pi{position:absolute;top:0;right:0;bottom:0;left:0;display:grid;place-items:center}
 .thumb.pasta .pi svg{width:26%;height:auto;filter:drop-shadow(0 .2rem 0 rgba(0,0,0,.25))}
 .selo{position:absolute;left:.8rem;bottom:.6rem;font-family:var(--display);font-weight:800;font-size:1rem;color:#fff;text-shadow:0 .1rem .3rem rgba(0,0,0,.6)}
 
@@ -94,9 +97,9 @@ h1,h2,h3{font-family:var(--display);margin:0;font-weight:800;text-wrap:balance}
 
 /* Jogos */
 .caixa{flex:1;min-height:0;display:flex;flex-direction:column;gap:2rem;align-items:center;justify-content:center}
-.grade-mem{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.4rem;width:min(100%,62vh*1.35,56rem)}
+.grade-mem{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.4rem;width:83vh;max-width:100%;width:min(100%,62vh*1.35,56rem)}
 .carta{aspect-ratio:1/1;border:0;border-radius:1.2rem;background:none;padding:0;position:relative;perspective:60rem}
-.carta .verso,.carta .frente{position:absolute;inset:0;border-radius:1.2rem;display:grid;place-items:center;backface-visibility:hidden;transition:transform .35s ease}
+.carta .verso,.carta .frente{position:absolute;top:0;right:0;bottom:0;left:0;border-radius:1.2rem;display:grid;place-items:center;backface-visibility:hidden;transition:transform .35s ease}
 .carta .verso{background:repeating-linear-gradient(45deg,#6a5cff 0 .7rem,#5a4cf0 .7rem 1.4rem);box-shadow:inset 0 0 0 .4rem rgba(255,255,255,.35)}
 .carta .frente{background:#fff7e8;transform:rotateY(180deg)}
 .carta .frente svg{width:68%;height:68%}
@@ -105,7 +108,7 @@ h1,h2,h3{font-family:var(--display);margin:0;font-weight:800;text-wrap:balance}
 .carta.par .frente{box-shadow:inset 0 0 0 .35rem var(--teal)}
 .fim{text-align:center;display:flex;flex-direction:column;gap:1rem;align-items:center}
 .fim h3{font-size:2.4rem;color:var(--sun)}
-.xilo{display:flex;gap:1.2vw;align-items:flex-end;height:min(62vh,34rem);width:100%;max-width:70rem}
+.xilo{display:flex;gap:1.2vw;align-items:flex-end;height:62vh;height:min(62vh,34rem);width:100%;max-width:70rem}
 .barra-n{flex:1;height:var(--h);background:var(--c);border:0;border-radius:1rem;box-shadow:inset 0 -.6rem 0 rgba(0,0,0,.18),inset 0 .5rem 0 rgba(255,255,255,.25)}
 .barra-n.bate{animation:bate .35s ease}
 @keyframes bate{0%{transform:scaleY(.94) rotate(-1.5deg)}60%{transform:scaleY(1.02) rotate(1deg)}100%{transform:none}}
@@ -113,7 +116,7 @@ h1,h2,h3{font-family:var(--display);margin:0;font-weight:800;text-wrap:balance}
 /* Senha e descanso */
 .pin,.descanso{align-items:center;text-align:center}
 .pin>.btn:first-child{align-self:flex-start}
-.pin h2,.descanso h2{font-size:clamp(2rem,4vw,3.4rem)}
+.pin h2,.descanso h2{font-size:4vw;font-size:clamp(2rem,4vw,3.4rem)}
 .pin p,.descanso p{margin:0;font-size:1.25rem;color:var(--muted);max-width:30rem;line-height:1.5}
 .dots{display:flex;gap:1rem}
 .dots i{width:1.4rem;height:1.4rem;border-radius:50%;border:.2rem solid var(--muted)}
@@ -138,11 +141,47 @@ textarea{min-height:7rem;resize:vertical}
 .item small{color:var(--muted);margin-right:.5rem}
 .msg{min-height:1.4em;color:var(--sun)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* Compatibilidade com navegadores de TV antigos */
+@supports not (aspect-ratio:1/1){
+  .thumb{height:0;padding-top:56.25%}
+  .thumb>img,.thumb>svg{position:absolute;left:0;top:0;width:100%;height:100%}
+  .carta{height:0;padding-top:100%}
+  .atalho{height:5.2rem}
+}
+.no-fg .tela:not(.hub)>*+*{margin-top:3vh}
+.no-fg .btn svg{margin-right:.5rem}
+.no-fg .nav>*{margin:0 .4rem .4rem 0}
+.no-fg .nav>.marca{margin-right:1.2rem}
+.no-fg .nav .marca>*+*{margin-left:.7rem}
+.no-fg .cab>*{margin:0 1.2rem .4rem 0}
+.no-fg .barra>*+*{margin-left:1.2rem}
+.no-fg .hero>*{margin:.5rem 1.1rem}
+.no-fg .fila>*+*{margin-left:1.3rem}
+.no-fg .atalho>*+*{margin-top:.4rem}
+.no-fg .cartao>*+*{margin-top:.6rem}
+.no-fg .caixa>*+*{margin-top:2rem}
+.no-fg .fim>*+*{margin-top:1rem}
+.no-fg .dots>*+*{margin-left:1rem}
+.no-fg .xilo>*+*{margin-left:1.2vw}
+.no-fg .bloco>*+*{margin-top:.9rem}
+.no-fg .painel>*+*{margin-top:1.4rem}
+.no-fg .linha>*{margin:0 .7rem .5rem 0}
+.no-fg .item>*+*{margin-left:.8rem}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
+/* Navegadores de TV antigos não entendem "gap" em flexbox: liga uma alternativa no CSS */
+(function(){ try{
+  var d = document.createElement('div');
+  d.style.cssText = 'display:flex;flex-direction:column;row-gap:1px;position:absolute;visibility:hidden';
+  d.appendChild(document.createElement('i')); d.appendChild(document.createElement('i'));
+  document.body.appendChild(d); var ok = d.scrollHeight === 1; document.body.removeChild(d);
+  if (!ok) document.documentElement.className += ' no-fg';
+}catch(e){} })();
+
 /* ---------- Configuração fácil ---------- */
 const NOME_APP = 'BenTube';
 const FRASE = 'hora de brincar';
